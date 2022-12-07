@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--对应包中的位置 接口全类名保持一致-->
+<mapper namespace="com.xxxx.blogjava.dao.mapper.ArticleMapper">
+
+<!--    文章归档查询语句 -->
+    <select id="listArchives" resultType="com.xxxx.blogjava.dao.dto.Archives">
+        select year(FROM_UNIXTIME(create_date/1000,'%Y-%m-%d %h:%i:%s' )) as year,month(FROM_UNIXTIME(create_date/1000,'%Y-%m-%d %h:%i:%s' )) as month,count(*) as count from blog.ms_article group by year,month
+    </select>
+
+</mapper>

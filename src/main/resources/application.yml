@@ -1,0 +1,32 @@
+server:
+  port: 8888
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    name: defaultDataSource
+    url: jdbc:mysql://localhost:3306/blog?serverTimezone=UTC
+    username: root
+    password: 123456
+  main:
+    banner-mode: off
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+  servlet:
+    multipart:
+      max-request-size: 20MB
+      max-file-size: 2MB
+
+mybatis-plus:
+  global-config:
+    banner: off
+    db-config:
+      table-prefix: ms_
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 七牛云服务器
+qiniu:
+  accessKey: LM3T4sne8g8MN-q8SGYskGFdMtaJoJW2QAf2UHaM
+  accessSecretKey: oi4-vIEivko9Mr2hRiOm4UAKcuXQQL-FUS9ch_p_
