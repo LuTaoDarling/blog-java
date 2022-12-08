@@ -77,6 +77,22 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public Result listArticle(PageParams pageParams) {
         Page<Article> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        if (pageParams.getCategoryId() != null) {
+            queryWrapper.eq(Article::getCategoryId, pageParams.getCategoryId());
+        }
+        ArrayList<Long> articleIdList = new ArrayList<>();
+        if (pageParams.getTagId() != null) {
+//            加入标签,条件查询
+            LambdaQueryWrapper<ArticleTag> articleQuery = new LambdaQueryWrapper<>();
+            articleQuery.eq(ArticleTag::getTagId, pageParams.getTagId());
+            List<ArticleTag> articleTags = articleTagMapper.selectList(articleQuery);
+            for (ArticleTag articleTag : articleTags) {
+                articleIdList.add(articleTag.getArticleId());
+            }
+            if (articleIdList.size() > 0) {
+                queryWrapper.in(Article::getId,articleIdList);
+            }
+        }
         queryWrapper.orderByDesc(Article::getWeight, Article::getCreateDate);
         Page<Article> articlePage = articleMapper.selectPage(page, queryWrapper);
         List<Article> records = articlePage.getRecords();
@@ -225,7 +241,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         article.setBodyId(articleBody.getId());
         articleMapper.updateById(article);
         HashMap<String, String> map = new HashMap<>();
-        map.put("id",article.getId().toString());
+        map.put("id", article.getId().toString());
 
         return Result.success(map);
     }
